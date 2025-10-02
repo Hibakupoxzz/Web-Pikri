@@ -1,118 +1,241 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Keranjang Belanja</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-        .header { background: #007bff; color: white; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
-        .btn { display: inline-block; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px; cursor: pointer; border: none; }
-        .btn-primary { background: #007bff; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-warning { background: #ffc107; color: black; }
-        .btn:hover { opacity: 0.8; }
-        .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .cart-container { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .cart-item { display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #ddd; }
-        .cart-item:last-child { border-bottom: none; }
-        .cart-image { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 20px; }
-        .cart-info { flex: 1; }
-        .cart-name { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 5px; }
-        .cart-price { color: #007bff; font-size: 16px; margin-bottom: 10px; }
-        .cart-actions { display: flex; align-items: center; gap: 10px; }
-        .qty-input { width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
-        .empty-cart { text-align: center; padding: 50px; }
-        .total-section { background: #f8f9fa; padding: 20px; margin-top: 20px; border-radius: 8px; }
-        .total-row { display: flex; justify-content: space-between; font-size: 24px; font-weight: bold; color: #333; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div class="header-content">
-            <h1>🛒 Keranjang Belanja</h1>
-            <a href="/user" class="btn btn-primary">← Kembali Belanja</a>
-        </div>
-    </div>
+@extends('layout')
 
-    <div class="container">
-        @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-        @endif
+@section('title', 'Keranjang Belanja')
 
-        @if(session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-        @endif
+@section('extra-css')
+<style>
+    body { background: #121212; color: #e5e5e5; }
 
-        <div class="cart-container">
-            @if($carts->count() > 0)
-                @foreach($carts as $cart)
-                <div class="cart-item">
-                    @if($cart->sparepart->gambar)
-                        <img src="{{ asset('uploads/spareparts/' . $cart->sparepart->gambar) }}" alt="{{ $cart->sparepart->nama_sparepart }}" class="cart-image">
-                    @else
-                        <img src="https://via.placeholder.com/100" alt="No Image" class="cart-image">
+    .navbar {
+    background: linear-gradient(to right, #2a2a2a, #1c1c1c);
+    padding: 20px 40px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+    .navbar .brand {
+        font-size: 20px;
+        font-weight: 700;
+        color: #ff6f61;
+    }
+
+    .navbar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 20px;
+    }
+    .navbar ul li {
+        padding-top: 10px;
+    }
+    .navbar ul li a {
+        color: #f5f5f5;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .navbar ul li a:hover {
+        color: #ff6f61;
+    }
+
+    .btn-info {
+    background: #007bff;
+    color: #fff;
+    }
+
+    .btn-danger {
+    background: #333;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    }
+
+    .cart-container {
+        background: #1e1e1e;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+
+    .cart-header {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #ff4d4d;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #333;
+        transition: background 0.2s;
+    }
+    .cart-item:hover { background: rgba(255,255,255,0.03); }
+
+    .cart-image {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-right: 20px;
+    }
+
+    .cart-info { flex: 1; }
+    .cart-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 6px;
+    }
+    .cart-price {
+        color: #28d17c;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    .cart-stock {
+        font-size: 13px;
+        color: #aaa;
+    }
+
+    .cart-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 20px;
+    }
+    .qty-input {
+        width: 60px;
+        padding: 6px;
+        border: 1px solid #444;
+        border-radius: 6px;
+        background: #222;
+        color: #fff;
+        text-align: center;
+    }
+
+    .subtotal {
+        font-weight: bold;
+        font-size: 16px;
+        color: #ffb347;
+        margin-left: 20px;
+    }
+
+    .total-section {
+        background: #1c1c1c;
+        padding: 25px;
+        margin-top: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 20px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 60px;
+        background: #1e1e1e;
+        border-radius: 12px;
+        color: #aaa;
+    }
+</style>
+@endsection
+
+<div class="navbar">
+    <div class="brand">BASIKAL TDR3000</div>
+        <ul>
+            <a href="/cart" class="btn btn-info">
+                🛒 Keranjang
+                @if(Auth::check())
+                    @php
+                        $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
+                    @endphp
+                    @if($cartCount > 0)
+                        <span class="cart-badge">{{ $cartCount }}</span>
                     @endif
-
-                    <div class="cart-info">
-                        <div class="cart-name">{{ $cart->sparepart->nama_sparepart }}</div>
-                        <div class="cart-price">Rp {{ number_format($cart->sparepart->harga, 0, ',', '.') }}</div>
-                        <div style="color: #666; font-size: 14px;">Stok tersedia: {{ $cart->sparepart->stok }}</div>
-                    </div>
-
-                    <div class="cart-actions">
-                        <form action="{{ route('cart.update', $cart->id) }}" method="POST" style="display: flex; align-items: center; gap: 10px;">
-                            @csrf
-                            <label>Jumlah:</label>
-                            <input type="number" name="jumlah" value="{{ $cart->jumlah }}" min="1" max="{{ $cart->sparepart->stok }}" class="qty-input">
-                            <button type="submit" class="btn btn-warning">Update</button>
-                        </form>
-
-                        <form action="{{ route('cart.destroy', $cart->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Hapus dari keranjang?')">Hapus</button>
-                        </form>
-                    </div>
-
-                    <div style="margin-left: 20px;">
-                        <div style="font-weight: bold; color: #333;">Subtotal:</div>
-                        <div style="font-size: 18px; color: #007bff;">
-                            Rp {{ number_format($cart->sparepart->harga * $cart->jumlah, 0, ',', '.') }}
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-
-                <div class="total-section">
-                    <div class="total-row">
-                        <span>Total Pembayaran:</span>
-                        <span style="color: #007bff;">Rp {{ number_format($total, 0, ',', '.') }}</span>
-                    </div>
-
-                    <form action="{{ route('cart.checkout') }}" method="POST" style="margin-top: 20px;">
-                        @csrf
-                        <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 18px;" onclick="return confirm('Lanjutkan checkout?')">
-                            Checkout Sekarang
-                        </button>
-                    </form>
-                </div>
-            @else
-                <div class="empty-cart">
-                    <h2>Keranjang Kosong</h2>
-                    <p>Belum ada item di keranjang Anda</p>
-                    <a href="/user" class="btn btn-primary">Mulai Belanja</a>
-                </div>
-            @endif
-        </div>
+                @endif
+            </a>
+            <a href="/riwayat" class="btn btn-success">Riwayat Transaksi</a>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </ul>
     </div>
-</body>
-</html>
+</div>
+
+@section('content')
+<div class="cart-container">
+    <div class="cart-header">🛒 Keranjang Belanja</div>
+
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-error">{{ session('error') }}</div>
+    @endif
+
+    @if($carts->count() > 0)
+        @foreach($carts as $cart)
+        <div class="cart-item">
+            @if($cart->sparepart->gambar)
+                <img src="{{ asset('uploads/spareparts/' . $cart->sparepart->gambar) }}" alt="{{ $cart->sparepart->nama_sparepart }}" class="cart-image">
+            @else
+                <img src="https://via.placeholder.com/100" alt="No Image" class="cart-image">
+            @endif
+
+            <div class="cart-info">
+                <div class="cart-name">{{ $cart->sparepart->nama_sparepart }}</div>
+                <div class="cart-price">Rp {{ number_format($cart->sparepart->harga, 0, ',', '.') }}</div>
+                <div class="cart-stock">Stok tersedia: {{ $cart->sparepart->stok }}</div>
+            </div>
+
+            <div class="cart-actions">
+                <form action="{{ route('cart.update', $cart->id) }}" method="POST" style="display: flex; align-items: center; gap: 8px;">
+                    @csrf
+                    <input type="number" name="jumlah" value="{{ $cart->jumlah }}" min="1" max="{{ $cart->sparepart->stok }}" class="qty-input">
+                    <button type="submit" class="btn btn-warning">Update</button>
+                </form>
+
+                <form action="{{ route('cart.destroy', $cart->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Hapus dari keranjang?')">Hapus</button>
+                </form>
+            </div>
+
+            <div class="subtotal">
+                Subtotal: Rp {{ number_format($cart->sparepart->harga * $cart->jumlah, 0, ',', '.') }}
+            </div>
+        </div>
+        @endforeach
+
+        <div class="total-section">
+            <div class="total-row">
+                <span>Total Pembayaran:</span>
+                <span style="color:#28d17c;">Rp {{ number_format($total, 0, ',', '.') }}</span>
+            </div>
+            <form action="{{ route('cart.checkout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-success" style="width:100%; padding:15px; font-size:18px;" onclick="return confirm('Lanjutkan checkout?')">
+                    ✅ Checkout Sekarang
+                </button>
+            </form>
+        </div>
+    @else
+        <div class="empty-cart">
+            <h2>Keranjang Kosong</h2>
+            <p>Belum ada item di keranjang Anda</p>
+            <a style="color: #ff4d4d" href="/user" class="btn btn-primary">Mulai Belanja</a>
+        </div>
+    @endif
+</div>
+@endsection

@@ -1,44 +1,171 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { background: white; padding: 30px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header h1 { color: #333; margin-bottom: 10px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .menu-card { background: white; padding: 30px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .menu-card h2 { color: #007bff; margin-bottom: 15px; }
-        .btn { display: inline-block; padding: 12px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
-        .btn:hover { background: #0056b3; }
-        .btn-danger { background: #dc3545; }
-        .btn-danger:hover { background: #c82333; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Dashboard Admin</h1>
-            <p>Selamat datang, {{ Auth::user()->name }}</p>
-            <a href="/logout" class="btn btn-danger">Logout</a>
+@extends('layout')
+
+@section('title', 'Admin Dashboard')
+
+@section('extra-css')
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .dashboard-card {
+        background: #1e1e1e;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(255, 0, 0, 0.25);
+        border-color: #e63946;
+    }
+
+    .dashboard-card h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dashboard-card p {
+        color: #cbd5e0;
+        margin-bottom: 18px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .icon {
+        font-size: 28px;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .welcome-text {
+        flex: 1;
+    }
+
+    .welcome-text h1 {
+        margin-bottom: 6px;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .welcome-text p {
+        color: #a0aec0;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #e63946;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #ff4d5a;
+    }
+
+    .btn-success {
+        background: #06d6a0;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background: #05b389;
+    }
+
+    .btn-warning {
+        background: #ffd166;
+        color: #222;
+    }
+
+    .btn-warning:hover {
+        background: #ffb347;
+    }
+
+    .btn-danger {
+        background: #ef233c;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #ff4b5c;
+    }
+
+    .card {
+        background: #121212;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 20px;
+    }
+
+    .card-body {
+        padding: 25px;
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <div class="header-actions">
+                <div class="welcome-text">
+                    <h1>Dashboard Admin</h1>
+                    <p>Selamat datang kembali, {{ Auth::user()->name }}!</p>
+                </div>
+                <a href="/logout" class="btn btn-danger">Logout</a>
+            </div>
         </div>
 
-        <div class="menu-grid">
-            <div class="menu-card">
-                <h2>📦 Kelola Sparepart</h2>
-                <p>Tambah, edit, hapus data sparepart</p>
-                <a href="/sparepart" class="btn">Lihat Sparepart</a>
-            </div>
+        <div class="card-body">
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3><span class="icon">📦</span> Kelola Produk</h3>
+                    <p>Sistem CRUD data produk. Kelola stok dan harga produk.</p>
+                    <a href="/sparepart" class="btn btn-primary">Lihat Sparepart</a>
+                </div>
 
-            <div class="menu-card">
-                <h2>👥 Kelola User</h2>
-                <p>Manajemen data pengguna</p>
-                <a href="/users" class="btn">Lihat User</a>
+                <div class="dashboard-card">
+                    <h3><span class="icon">👥</span> Kelola User</h3>
+                    <p>Manajemen data pengguna yang terdaftar di sistem.</p>
+                    <a href="/users" class="btn btn-success">Lihat User</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3><span class="icon">📊</span> Statistik</h3>
+                    <p>Lihat laporan penjualan dan aktivitas toko.</p>
+                    <a href="#" class="btn btn-warning">Segera Hadir</a>
+                </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

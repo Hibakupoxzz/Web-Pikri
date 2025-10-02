@@ -1,73 +1,126 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tambah Sparepart</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-        .container { max-width: 800px; margin: 50px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        h1 { color: #333; margin-bottom: 20px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
-        textarea { resize: vertical; min-height: 100px; }
-        .btn { display: inline-block; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px; cursor: pointer; border: none; }
-        .btn-primary { background: #007bff; color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
-        .btn:hover { opacity: 0.8; }
-        .error { color: red; font-size: 12px; margin-top: 5px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Tambah Sparepart Baru</h1>
+@extends('layout')
 
-        <form action="/sparepart" method="POST" enctype="multipart/form-data">
-            @csrf
+@section('title', 'Tambah Sparepart')
 
-            <div class="form-group">
-                <label>Nama Sparepart</label>
-                <input type="text" name="nama_sparepart" value="{{ old('nama_sparepart') }}" required>
-                @error('nama_sparepart')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-            </div>
+@section('extra-css')
+<style>
+    .form-container {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 25px;
+        background: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    }
 
-            <div class="form-group">
-                <label>Deskripsi</label>
-                <textarea name="deskripsi">{{ old('deskripsi') }}</textarea>
-                @error('deskripsi')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-            </div>
+    .form-container h1 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #ff4d4d;
+    }
 
-            <div class="form-group">
-                <label>Harga (Rp)</label>
-                <input type="number" name="harga" value="{{ old('harga') }}" required>
-                @error('harga')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-            </div>
+    .form-container p {
+        color: #aaa;
+        margin-bottom: 20px;
+    }
 
-            <div class="form-group">
-                <label>Stok</label>
-                <input type="number" name="stok" value="{{ old('stok') }}" required>
-                @error('stok')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-            </div>
+    .form-group {
+        margin-bottom: 18px;
+    }
 
-            <div class="form-group">
-                <label>Gambar</label>
-                <input type="file" name="gambar" accept="image/*">
-                @error('gambar')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-            </div>
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #f1f1f1;
+    }
 
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="/sparepart" class="btn btn-secondary">Batal</a>
-        </form>
-    </div>
-</body>
-</html>
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 8px;
+        border: 1px solid #333;
+        background: #121212;
+        color: #eee;
+        font-size: 15px;
+        transition: border 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border: 1px solid #ff4d4d;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 25px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn-secondary {
+        background: #333;
+        color: #fff;
+    }
+    .btn-secondary:hover {
+        background: #444;
+    }
+
+    .btn-success {
+        background: #ff4d4d;
+        color: #fff;
+    }
+    .btn-success:hover {
+        background: #e63939;
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="form-container">
+    <h1>Tambah Data</h1>
+    <p>Isi form di bawah untuk menambahkan data baru</p>
+
+    <form action="/sparepart" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="form-group">
+            <label for="nama_sparepart">Nama</label>
+            <input type="text" name="nama_sparepart" id="nama_sparepart" required placeholder="Contoh: TDR5000">
+        </div>
+
+        <div class="form-group">
+            <label for="harga">Harga</label>
+            <input type="number" name="harga" id="harga" required placeholder="Masukkan harga (Rp)">
+        </div>
+
+        <div class="form-group">
+            <label for="stok">Stok</label>
+            <input type="number" name="stok" id="stok" required placeholder="Masukkan jumlah stok">
+        </div>
+
+        <div class="form-group">
+            <label for="gambar">Upload Gambar</label>
+            <input type="file" name="gambar" id="gambar" accept="image/*">
+        </div>
+
+        <div class="form-actions">
+            <a href="/sparepart" class="btn btn-secondary">← Kembali</a>
+            <button type="submit" class="btn btn-success">+ Simpan Sparepart</button>
+        </div>
+    </form>
+</div>
+@endsection
