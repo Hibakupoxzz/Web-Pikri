@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Sparepart;
+use App\Models\Transaksi; // ✅ tambahkan ini
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -88,12 +89,22 @@ class CartController extends Controller
                 return back()->with('error', "Stok {$sparepart->nama_sparepart} tidak mencukupi!");
             }
 
+            // Kurangi stok
             $sparepart->stok -= $cart->jumlah;
             $sparepart->save();
+
+            // Catat transaksi ke tabel transaksis
+            Transaksi::create([
+                'user_id'      => Auth::id(),
+                'sparepart_id' => $sparepart->id,
+                'jumlah'       => $cart->jumlah,
+                'total'        => $sparepart->harga * $cart->jumlah,
+            ]);
         }
 
+        // Kosongkan keranjang setelah transaksi tercatat
         Cart::where('user_id', Auth::id())->delete();
 
-        return redirect('/user')->with('success', 'Checkout berhasil! Terima kasih sudah berbelanja.');
+        return redirect('/user/riwayat')->with('success', 'Checkout berhasil! Riwayat transaksi sudah tercatat.');
     }
 }

@@ -54,11 +54,29 @@
     border: 1px solid #ff4d4d;
     }
 
+    .btn-secondary {
+    background: #ff4d4d;
+    color: #ddd;
+    }
+
     .cart-container {
         background: #1e1e1e;
         border-radius: 12px;
         padding: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+
+    .header {
+    background: #1e1e1e;
+    color: #ff4d4d;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     }
 
     .cart-header {
@@ -154,8 +172,9 @@
 <div class="navbar">
     <div class="brand">BASIKAL TDR3000</div>
         <ul>
+            <a href="/user" class="btn btn-secondary">← Dashboard</a>
             <a href="/cart" class="btn btn-info">
-                🛒 Keranjang
+                Keranjang
                 @if(Auth::check())
                     @php
                         $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
@@ -172,8 +191,10 @@
 </div>
 
 @section('content')
+    <div class="header">
+        <h1>Keranjang</h1>
+    </div>
 <div class="cart-container">
-    <div class="cart-header">🛒 Keranjang Belanja</div>
 
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>

@@ -191,7 +191,7 @@
     <div class="brand">BASIKAL TDR3000</div>
         <ul>
             <a href="/cart" class="btn btn-info">
-                🛒 Keranjang
+                Keranjang
                 @if(Auth::check())
                     @php
                         $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
