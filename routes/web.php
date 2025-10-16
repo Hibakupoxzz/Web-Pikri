@@ -33,7 +33,9 @@ Route::middleware('auth')->group(function() {
     // Route untuk user
     Route::get('/user', [TransaksiController::class,'index']);
     Route::post('/beli/{id}', [TransaksiController::class,'beli'])->name('beli');
+    Route::get('/riwayat', [TransaksiController::class,'riwayat'])->name('user.transaksi');
     Route::get('/user/riwayat', [TransaksiController::class,'riwayat'])->name('user.transaksi');
+
 
     // Route cart - TAMBAHKAN INI
     Route::get('/cart', [CartController::class,'index'])->name('cart.index');

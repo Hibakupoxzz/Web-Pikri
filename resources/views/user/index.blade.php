@@ -201,7 +201,7 @@
                     @endif
                 @endif
             </a>
-            <a href="/riwayat" class="btn btn-success">Riwayat Transaksi</a>
+            <a href="/user/riwayat" class="btn btn-success">Riwayat Transaksi</a>
             <a href="/logout" class="btn btn-danger">Logout</a>
         </ul>
     </div>

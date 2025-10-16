@@ -5,6 +5,53 @@
 @section('content')
 
 <style>
+    body {
+        background: #121212;
+        color: #e5e5e5;
+        font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+    background: linear-gradient(to right, #2a2a2a, #1c1c1c);
+    padding: 20px 40px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+    .navbar .brand {
+        font-size: 20px;
+        font-weight: 700;
+        color: #ff6f61;
+    }
+
+    .navbar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 20px;
+    }
+    .navbar ul li {
+        padding-top: 10px;
+    }
+    .navbar ul li a {
+        color: #f5f5f5;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .navbar ul li a:hover {
+        color: #ff6f61;
+    }
+
+    .container {
+        padding: 0px;
+    }
+
 .statistik-wrapper {
     padding: 60px 20px;
     min-height: 80vh;
@@ -37,6 +84,16 @@ canvas {
     margin-top: 40px;
 }
 </style>
+
+<div class="navbar">
+    <div class="brand">BASIKAL TDR3000</div>
+    <ul>
+        <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+        <li><a href="{{ url('/sparepart') }}">Produk</a></li>
+        <li><a href="{{ url('/users') }}">Pengunjung</a></li>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </ul>
+</div>
 
 <div class="statistik-wrapper">
     <div class="statistik-card">
