@@ -212,7 +212,6 @@ tbody tr:nth-child(even) {
         <li><a href="{{ url('/admin') }}">Dashboard</a></li>
         <li><a href="{{ url('/sparepart') }}">Produk</a></li>
         <li><a href="{{ url('/users') }}">Pengunjung</a></li>
-        <li><a href="{{ url('#') }}">Transaksi</a></li>
         <a href="/logout" class="btn btn-danger">Logout</a>
     </ul>
 </div>
