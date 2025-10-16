@@ -1,9 +1,8 @@
 @extends('layout')
 
-@section('title', 'Login - Toko Sparepart Sepeda')
+@section('title', 'Register - Toko Sparepart Sepeda')
 
 @section('content')
-
 
 <style>
 /* Wrapper */
@@ -122,33 +121,54 @@
     <div class="login-card">
         <div class="login-header">
             <div class="login-icon"></div>
-            <h2>Login</h2>
-            <p>Selamat datang</p>
+            <h2>Register</h2>
+            <p>Buat akun baru</p>
         </div>
 
-        @if($errors->any())
+        {{-- Error --}}
+        @if ($errors->any())
             <div class="alert-error">
                 {{ $errors->first() }}
             </div>
         @endif
 
-        <form action="{{ url('/login') }}" method="POST">
+        {{-- Success --}}
+        @if (session('success'))
+            <div class="alert-error" style="border-color: #43a047; background:#1b3020; color:#b2ffb2;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form action="{{ route('register.submit') }}" method="POST">
             @csrf
+
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="name" placeholder="Masukkan nama anda" value="{{ old('name') }}" required>
+            </div>
+
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" placeholder="Masukkan email anda" required autofocus>
+                <input type="email" name="email" placeholder="Masukkan email anda" value="{{ old('email') }}" required>
             </div>
 
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Masukkan password anda" required>
             </div>
-            <button type="submit" class="btn-login">Masuk</button>
+
+            <div class="form-group">
+                <label>Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" placeholder="Ulangi password anda" required>
+            </div>
+
+            <button type="submit" class="btn-login">Daftar</button>
         </form>
 
         <div class="footer-form">
-            <h4>Need an account?<a href="{{ url('/register') }}" style="color: #ff6f61"> Sign up here</a></h4>
+            <h4>Already have account? <a href="{{ url('/login') }}" style="color: #ff6f61">Login here!</a></h4>
         </div>
     </div>
 </div>
+
 @endsection

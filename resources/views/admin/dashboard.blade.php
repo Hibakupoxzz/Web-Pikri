@@ -158,6 +158,13 @@
                     <p>Manajemen data pengguna yang terdaftar di sistem.</p>
                     <a href="/users" class="btn btn-success">Lihat User</a>
                 </div>
+
+                <div class="dashboard-card">
+                    <h3><span class="icon">📊</span> Statistik</h3>
+                    <p>Lihat laporan penjualan dan aktivitas toko.</p>
+                    <a href="/statistik" class="btn btn-warning">Lihat Statistik</a>
+                </div>
+
             </div>
         </div>
     </div>
