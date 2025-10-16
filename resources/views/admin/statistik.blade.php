@@ -104,7 +104,7 @@ canvas {
     </div>
 
     <div class="statistik-card">
-        <h2>Grafik Pendapatan Harian</h2>
+        <h2>Grafik pendapatan harian</h2>
         <canvas id="grafikPendapatan" height="130"></canvas>
     </div>
 </div>
